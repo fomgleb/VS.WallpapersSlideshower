@@ -13,7 +13,13 @@
             <TextBlock Name="FolderPathTextBox"/>
         </StackPanel>
         <ListBox Name="WallpapersListBox" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
-            <ListBoxItem>mama</ListBoxItem>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="100" Height="75" Source="{Binding Path=Path}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
     </StackPanel>
 </Window>

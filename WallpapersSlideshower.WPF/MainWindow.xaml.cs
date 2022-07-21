@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WallpapersSlideshower.BusinessLogic.Controller;
+using WallpapersSlideshower.BusinessLogic.Model;
 
 namespace WallpapersSlideshower.WPF
 {
@@ -29,16 +30,22 @@ namespace WallpapersSlideshower.WPF
 
         private void SelectFolderButton_Click(object sender, RoutedEventArgs e)
         {
+            SelectWallpapersFolder();
+            ShowWallpapers();
+        }
+
+        private void SelectWallpapersFolder()
+        {
             var folderBrowserDialog = new FolderBrowserDialog();
             folderBrowserDialog.ShowDialog();
 
             FolderPathTextBox.Text = folderBrowserDialog.SelectedPath;
             _wallpapersController = new WallpapersController(folderBrowserDialog.SelectedPath, SearchOption.AllDirectories);
+        }
 
-            foreach (var wallpaper in _wallpapersController.Wallpapers)
-            {
-                WallpapersListBox.Items.Add(wallpaper.Path);
-            }
+        private void ShowWallpapers()
+        {
+            WallpapersListBox.ItemsSource = _wallpapersController.Wallpapers;
         }
     }
 }
