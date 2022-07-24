@@ -128,11 +128,5 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WallpapersSlideshower.BusinessLogic\WallpapersSlideshower.BusinessLogic.csproj">
-      <Project>{94094ee1-740e-472a-a877-16a779739e52}</Project>
-      <Name>WallpapersSlideshower.BusinessLogic</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
