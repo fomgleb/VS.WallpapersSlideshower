@@ -8,6 +8,14 @@
         xmlns:vm="clr-namespace:WallpapersSlideshower.ViewModels" d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Wallpapers Slideshower" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/Buttons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -16,31 +24,37 @@
 
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <Button Command="{Binding SelectFolderCommand}" Content="Select Folder"/>
-                <TextBlock Text="{Binding PathToFolder}"/>
+            <StackPanel Orientation="Vertical" Grid.Row="0">
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding SelectFolderCommand}" Content="Select Folder"/>
+                    <ToggleButton Content="Enable" 
+                                  Command="{Binding SetSlideshowEnabledCommand}"
+                                  CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
             </StackPanel>
             <ListView dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                       Grid.Row="1"
                       ScrollViewer.CanContentScroll="False"
-                      ItemsSource="{Binding Wallpapers}" Height="auto"
-                      SelectedItem="{Binding SelectedWallpaper}">
+                      ItemsSource="{Binding WallpapersViewModels}" Height="auto"
+                      SelectedItem="{Binding SelectedWallpaperViewModel}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" ScrollViewer.CanContentScroll="True">
-                            <Image Width="100" Height="75" Source="{Binding PathToImage}"/>
-                            <TextBlock Text="{Binding FileName}" Margin="5,0,0,0"/>
+                            <Image Width="100" Height="75" Source="{Binding IconImageSource}"/>
+                            <TextBlock Text="{Binding FileName}" Margin="5,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListView>
+            <TextBlock Grid.Row="2" Text="{Binding WallpapersViewModels.Count, StringFormat=Number: {0}}"/>
         </Grid>
         <Image Grid.Column="1"
-               Source="{Binding SelectedWallpaper.PathToImage}"/>
+               Source="{Binding SelectedWallpaperViewModel.PathToImage}"/>
     </Grid>
-    
 </Window>

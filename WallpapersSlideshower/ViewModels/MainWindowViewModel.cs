@@ -1,55 +1,84 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Forms;
 using System.Windows.Input;
 using WallpapersSlideshower.Models;
-using WPFTesting.Infrastructure.Commands;
+using WallpapersSlideshower.Commands;
+using System.Collections.Specialized;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WallpapersSlideshower.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private const int WIDTH_OF_ICON_RESOLUTION = 150;
+
         private readonly WallpaperSlideshow _wallpaperSlideshow;
 
-        public ObservableCollection<Wallpaper> Wallpapers { get; set; }
+        public ObservableCollection<WallpaperViewModel> WallpapersViewModels { get; set; }
 
+        public string PathToFolder { get => _pathToFolder; set => Set(ref _pathToFolder, value); }
         private string _pathToFolder;
-        public string PathToFolder
-        {
-            get => _pathToFolder;
-            set => Set(ref _pathToFolder, value);
-        }
 
-        private Wallpaper _selectedWallpaper;
-        public Wallpaper SelectedWallpaper
-        {
-            get => _selectedWallpaper;
-            set => Set(ref _selectedWallpaper, value);
-        }
+        public WallpaperViewModel SelectedWallpaperViewModel { get => _selectedWallpaperViewModel; set => Set(ref _selectedWallpaperViewModel, value); }
+        private WallpaperViewModel _selectedWallpaperViewModel;
+
+        public bool SlideshowIsEnabled { get => _slideshowIsEnabled; set => Set(ref _slideshowIsEnabled, value); }
+        private bool _slideshowIsEnabled;
 
         public ICommand SelectFolderCommand { get; }
-        private bool CanSelectFolderCommandExecute(object p) => true;
-        private void OnSelectFolderCommandExecuted(object p)
-        {
-            var folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.ShowDialog();
-            _wallpaperSlideshow.SelectWallpapersFromFolder(folderBrowserDialog.SelectedPath, System.IO.SearchOption.AllDirectories);
-            PathToFolder = folderBrowserDialog.SelectedPath;
-
-            Microsoft.Win32.SystemEvents.PowerModeChanged += (s, e) =>
-            {
-                if (e.Mode != Microsoft.Win32.PowerModes.Resume) return;
-                _wallpaperSlideshow.SwitchToNextWalppaper();
-                _wallpaperSlideshow.ShowCurrentWallpaper();
-            };
-        }
+        public ICommand SetSlideshowEnabledCommand { get; }
 
         public MainWindowViewModel(WallpaperSlideshow wallpaperSlideshow)
         {
             _wallpaperSlideshow = wallpaperSlideshow;
+            WallpapersViewModels = new ObservableCollection<WallpaperViewModel>();
+            WallpapersViewModels.CollectionChanged += OnWallpapersViewModelsChanged;
 
-            SelectFolderCommand = new ActionCommand(OnSelectFolderCommandExecuted, CanSelectFolderCommandExecute);
+            _pathToFolder = wallpaperSlideshow.PathToWallpapersFolder;
 
-            Wallpapers = wallpaperSlideshow.Wallpapers;
+            SelectFolderCommand = new SelectFolderCommand(this, _wallpaperSlideshow);
+            SetSlideshowEnabledCommand = new SetSlideshowEnabledCommand(this, _wallpaperSlideshow);
+
+            UpdateWallpapersViewModelsAsync();
+        }
+
+        public async void UpdateWallpapersViewModelsAsync()
+        {
+            WallpapersViewModels.CollectionChanged -= OnWallpapersViewModelsChanged;
+            WallpapersViewModels.Clear();
+            foreach (var wallpaper in _wallpaperSlideshow.Wallpapers)
+            {
+                var wallpaperViewModel = new WallpaperViewModel(wallpaper.PathToImage, WIDTH_OF_ICON_RESOLUTION);
+                WallpapersViewModels.Add(wallpaperViewModel);
+            }
+
+            WallpapersViewModels.CollectionChanged -= OnWallpapersViewModelsChanged;
+            WallpapersViewModels.CollectionChanged += OnWallpapersViewModelsChanged;
+
+            _currentLoadAllIconImagesCancellationTockenSource?.Cancel();
+            _currentLoadAllIconImagesCancellationTockenSource = new CancellationTokenSource();
+            _currentLoadAllIconImagesTask = LoadAllIconImagesAsync(_currentLoadAllIconImagesCancellationTockenSource);
+        }
+
+        private Task _currentLoadAllIconImagesTask;
+        private CancellationTokenSource _currentLoadAllIconImagesCancellationTockenSource;
+        private async Task LoadAllIconImagesAsync(CancellationTokenSource cancellationTokenSource)
+        {
+            var wallpapersViewModelsCopy = new WallpaperViewModel[WallpapersViewModels.Count];
+            WallpapersViewModels.CopyTo(wallpapersViewModelsCopy, 0);
+            foreach (var wallpaperViewModel in wallpapersViewModelsCopy)
+            {
+                await wallpaperViewModel.LoadIconImageAsync();
+                if (cancellationTokenSource.IsCancellationRequested)
+                    return;
+            }
+        }
+
+        private void OnWallpapersViewModelsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            _wallpaperSlideshow.Wallpapers.Clear();
+            foreach (var wallpaperViewModel in WallpapersViewModels)
+                _wallpaperSlideshow.Wallpapers.Add(new Wallpaper(wallpaperViewModel.PathToImage));
         }
     }
 }

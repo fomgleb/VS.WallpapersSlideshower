@@ -3,6 +3,7 @@ using System.IO;
 
 namespace WallpapersSlideshower.Models
 {
+    [Serializable]
     public sealed class Wallpaper
     {
         public string FileName { get; }

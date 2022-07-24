@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using WallpapersSlideshower.Models;
 using WallpapersSlideshower.ViewModels;
 
@@ -10,11 +9,19 @@ namespace WallpapersSlideshower
     /// </summary>
     public partial class App : Application
     {
+        private const string WALLPAPER_SLIDESHOW_FILE_NAME = "WallpaperSlideshow.dat";
         private readonly WallpaperSlideshow _wallpaperSlideshow;
 
         public App()
         {
-            _wallpaperSlideshow = new WallpaperSlideshow();
+            var loadedWallpaperSlideshow = SaverLoader.Load<WallpaperSlideshow>(WALLPAPER_SLIDESHOW_FILE_NAME);
+            if (loadedWallpaperSlideshow != null)
+            {
+                _wallpaperSlideshow = loadedWallpaperSlideshow;
+                loadedWallpaperSlideshow.GetWallpapersFromFolder(loadedWallpaperSlideshow.PathToWallpapersFolder, System.IO.SearchOption.AllDirectories);
+            }
+            else
+                _wallpaperSlideshow = new WallpaperSlideshow();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -26,6 +33,12 @@ namespace WallpapersSlideshower
             MainWindow.Show();
 
             base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            SaverLoader.Save(WALLPAPER_SLIDESHOW_FILE_NAME, _wallpaperSlideshow);
+            base.OnExit(e);
         }
     }
 }

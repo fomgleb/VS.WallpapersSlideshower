@@ -1,12 +1,13 @@
-﻿using DesktopWallpaper;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using DesktopWallpaper;
 
 namespace WallpapersSlideshower.Models
 {
+    [Serializable]
     public class WallpaperSlideshow
     {
         public ObservableCollection<Wallpaper> Wallpapers { get; set; }
@@ -24,8 +25,11 @@ namespace WallpapersSlideshower.Models
             Wallpapers = new ObservableCollection<Wallpaper>();
         }
 
-        public void SelectWallpapersFromFolder(string pathToFolder, SearchOption searchOption)
+        public void GetWallpapersFromFolder(string pathToFolder, SearchOption searchOption)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Restart();
+
             var absolutePathToFolder = pathToFolder;
 
             if (string.IsNullOrWhiteSpace(absolutePathToFolder))
@@ -39,10 +43,12 @@ namespace WallpapersSlideshower.Models
                         return true;
                 return false;
             }).ToList();
+            Wallpapers.Clear();
             foreach (var pathToImage in pathsToImages)
                 Wallpapers.Add(new Wallpaper(pathToImage));
 
             _currentWallpaperIndex = 0;
+            stopwatch.Stop();
         }
 
         public void ShowCurrentWallpaper()
@@ -55,6 +61,11 @@ namespace WallpapersSlideshower.Models
             _currentWallpaperIndex++;
             if (_currentWallpaperIndex >= Wallpapers.Count)
                 _currentWallpaperIndex = 0;
+        }
+
+        public void SwitchToFirstWallpaper()
+        {
+            _currentWallpaperIndex = 0;
         }
     }
 }

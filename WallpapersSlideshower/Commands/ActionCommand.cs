@@ -1,7 +1,6 @@
 ﻿using System;
-using WallpapersSlideshower.Commands;
 
-namespace WPFTesting.Infrastructure.Commands
+namespace WallpapersSlideshower.Commands
 {
     public class ActionCommand : CommandBase
     {
