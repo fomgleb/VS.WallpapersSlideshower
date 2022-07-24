@@ -16,10 +16,7 @@ namespace WallpapersSlideshower
         {
             var loadedWallpaperSlideshow = SaverLoader.Load<WallpaperSlideshow>(WALLPAPER_SLIDESHOW_FILE_NAME);
             if (loadedWallpaperSlideshow != null)
-            {
                 _wallpaperSlideshow = loadedWallpaperSlideshow;
-                loadedWallpaperSlideshow.GetWallpapersFromFolder(loadedWallpaperSlideshow.PathToWallpapersFolder, System.IO.SearchOption.AllDirectories);
-            }
             else
                 _wallpaperSlideshow = new WallpaperSlideshow();
         }

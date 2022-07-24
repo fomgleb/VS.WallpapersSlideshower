@@ -29,7 +29,7 @@ namespace WallpapersSlideshower.Commands
             var dialogResult = folderBrowserDialog.ShowDialog();
             if (dialogResult == DialogResult.Cancel) return;
 
-            _wallpaperSlideshow.GetWallpapersFromFolder(folderBrowserDialog.SelectedPath, System.IO.SearchOption.AllDirectories);
+            _wallpaperSlideshow.GetWallpapersFromFolder(folderBrowserDialog.SelectedPath, System.IO.SearchOption.TopDirectoryOnly);
             _mainWindowViewModel.PathToFolder = folderBrowserDialog.SelectedPath;
             _mainWindowViewModel.UpdateWallpapersViewModelsAsync();
         }
