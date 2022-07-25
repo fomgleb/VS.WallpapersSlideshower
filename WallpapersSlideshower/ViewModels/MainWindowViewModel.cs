@@ -22,6 +22,7 @@ namespace WallpapersSlideshower.ViewModels
         public WallpaperViewModel SelectedWallpaperViewModel { get => _selectedWallpaperViewModel; set => Set(ref _selectedWallpaperViewModel, value); }
         private WallpaperViewModel _selectedWallpaperViewModel;
 
+        public bool SlideshowIsntEnabled => !_slideshowIsEnabled;
         public bool SlideshowIsEnabled { get => _slideshowIsEnabled; set => Set(ref _slideshowIsEnabled, value); }
         private bool _slideshowIsEnabled;
 
@@ -39,10 +40,10 @@ namespace WallpapersSlideshower.ViewModels
             SelectFolderCommand = new SelectFolderCommand(this, _wallpaperSlideshow);
             SetSlideshowEnabledCommand = new SetSlideshowEnabledCommand(this, _wallpaperSlideshow);
 
-            UpdateWallpapersViewModelsAsync();
+            UpdateWallpapersViewModels();
         }
 
-        public async void UpdateWallpapersViewModelsAsync()
+        public void UpdateWallpapersViewModels()
         {
             WallpapersViewModels.CollectionChanged -= OnWallpapersViewModelsChanged;
             WallpapersViewModels.Clear();
@@ -57,12 +58,11 @@ namespace WallpapersSlideshower.ViewModels
 
             _currentLoadAllIconImagesCancellationTockenSource?.Cancel();
             _currentLoadAllIconImagesCancellationTockenSource = new CancellationTokenSource();
-            _currentLoadAllIconImagesTask = LoadAllIconImagesAsync(_currentLoadAllIconImagesCancellationTockenSource);
+            LoadAllIconImagesAsync(_currentLoadAllIconImagesCancellationTockenSource);
         }
 
-        private Task _currentLoadAllIconImagesTask;
         private CancellationTokenSource _currentLoadAllIconImagesCancellationTockenSource;
-        private async Task LoadAllIconImagesAsync(CancellationTokenSource cancellationTokenSource)
+        private async void LoadAllIconImagesAsync(CancellationTokenSource cancellationTokenSource)
         {
             var wallpapersViewModelsCopy = new WallpaperViewModel[WallpapersViewModels.Count];
             WallpapersViewModels.CopyTo(wallpapersViewModelsCopy, 0);

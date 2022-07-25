@@ -31,7 +31,7 @@ namespace WallpapersSlideshower.Commands
 
             _wallpaperSlideshow.GetWallpapersFromFolder(folderBrowserDialog.SelectedPath, System.IO.SearchOption.TopDirectoryOnly);
             _mainWindowViewModel.PathToFolder = folderBrowserDialog.SelectedPath;
-            _mainWindowViewModel.UpdateWallpapersViewModelsAsync();
+            _mainWindowViewModel.UpdateWallpapersViewModels();
         }
     }
 }
