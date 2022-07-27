@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using WallpapersSlideshower.Models;
 using WallpapersSlideshower.ViewModels;
+using WallpapersSlideshower.Properties;
 
 namespace WallpapersSlideshower
 {
@@ -11,6 +12,7 @@ namespace WallpapersSlideshower
     {
         private const string WALLPAPER_SLIDESHOW_FILE_NAME = "WallpaperSlideshow.dat";
         private readonly WallpaperSlideshow _wallpaperSlideshow;
+        private readonly MainWindowViewModel _mainWindowViewModel;
 
         public App()
         {
@@ -19,13 +21,18 @@ namespace WallpapersSlideshower
                 _wallpaperSlideshow = loadedWallpaperSlideshow;
             else
                 _wallpaperSlideshow = new WallpaperSlideshow();
+
+            _mainWindowViewModel = new MainWindowViewModel(_wallpaperSlideshow)
+            {
+                RandomIsEnabled = Settings.Default.RandomIsEnabled
+            };
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             MainWindow = new MainWindow()
             {
-                DataContext = new MainWindowViewModel(_wallpaperSlideshow)
+                DataContext = _mainWindowViewModel
             };
             MainWindow.Show();
 
@@ -35,6 +42,8 @@ namespace WallpapersSlideshower
         protected override void OnExit(ExitEventArgs e)
         {
             SaverLoader.Save(WALLPAPER_SLIDESHOW_FILE_NAME, _wallpaperSlideshow);
+            Settings.Default.RandomIsEnabled = _mainWindowViewModel.RandomIsEnabled;
+            Settings.Default.Save();
             base.OnExit(e);
         }
     }

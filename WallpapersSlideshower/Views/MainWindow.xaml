@@ -4,21 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WallpapersSlideshower"
+        xmlns:c="clr-namespace:WallpapersSlideshower.Converters"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:vm="clr-namespace:WallpapersSlideshower.ViewModels" d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="Wallpapers Slideshower" Height="450" Width="800">
+        Title="Wallpapers Slideshower" Height="450" Width="1048">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Styles/Buttons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <c:NegatingConverter x:Key="negatingConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="300"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
@@ -28,13 +30,61 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            
+
             <StackPanel Orientation="Vertical" Grid.Row="0">
                 <StackPanel Orientation="Horizontal">
-                    <Button Command="{Binding SelectFolderCommand}" Content="Select Folder"/>
-                    <ToggleButton Content="Enable" 
-                                  Command="{Binding SetSlideshowEnabledCommand}"
-                                  CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
+                    <Button Command="{Binding SelectFolderCommand}" 
+                            Content="Select Folder"/>
+                    <CheckBox Template="{DynamicResource myCheckBoxTemplate}"
+                              Content="Random"
+                              IsChecked="{Binding RandomIsEnabled}"
+                              Command="{Binding ChangeRandomEnabledCommand}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"/>
+                    <ToggleButton Command="{Binding ChangeSlideshowEnabledCommand}"
+                                  CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
+                                  Width="50"
+                                  Height="23"
+                                  Margin="3,3,0,3">
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Border x:Name="mainBorder"
+                                        Background="#FFDDDDDD"
+                                        BorderBrush="#FF707070"
+                                        BorderThickness="1"
+                                        SnapsToDevicePixels="True">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border x:Name="squareBorder"
+                                                Margin="3"
+                                                Background="Red"
+                                                BorderBrush="Black"
+                                                BorderThickness="2"
+                                                SnapsToDevicePixels="True">
+                                        </Border>
+                                        <TextBlock Text="OFF"
+                                                   x:Name="text"
+                                                   Grid.Column="1"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter TargetName="mainBorder" Property="Background" Value="#FFBEE6FD"/>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="true">
+                                        <Setter TargetName="squareBorder" Property="Grid.Column" Value="1"/>
+                                        <Setter TargetName="text" Property="Grid.Column" Value="0"/>
+                                        <Setter TargetName="squareBorder" Property="Background" Value="Green"/>
+                                        <Setter TargetName="text" Property="Text" Value="ON"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
                 </StackPanel>
                 <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
             </StackPanel>
@@ -54,7 +104,7 @@
             </ListView>
             <TextBlock Grid.Row="2" Text="{Binding WallpapersViewModels.Count, StringFormat=Number: {0}}"/>
         </Grid>
-        <Image Grid.Column="1"
+        <Image Grid.Column="2"
                Source="{Binding SelectedWallpaperViewModel.PathToImage}"/>
     </Grid>
 </Window>

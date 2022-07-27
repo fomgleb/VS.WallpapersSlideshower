@@ -64,9 +64,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ActionCommand.cs" />
+    <Compile Include="Commands\ChangeWallpapersRandomEnabledCommand.cs" />
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\SelectFolderCommand.cs" />
-    <Compile Include="Commands\SetSlideshowEnabledCommand.cs" />
+    <Compile Include="Commands\ChangeSlideshowEnabledCommand.cs" />
+    <Compile Include="Converters\NegatingConverter.cs" />
     <Compile Include="Models\SaverLoader.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

@@ -4,10 +4,11 @@ using WallpapersSlideshower.Models;
 using WallpapersSlideshower.Commands;
 using System.Collections.Specialized;
 using System.Threading;
-using System.Threading.Tasks;
+using System;
 
 namespace WallpapersSlideshower.ViewModels
 {
+    [Serializable]
     public class MainWindowViewModel : ViewModelBase
     {
         private const int WIDTH_OF_ICON_RESOLUTION = 150;
@@ -22,12 +23,15 @@ namespace WallpapersSlideshower.ViewModels
         public WallpaperViewModel SelectedWallpaperViewModel { get => _selectedWallpaperViewModel; set => Set(ref _selectedWallpaperViewModel, value); }
         private WallpaperViewModel _selectedWallpaperViewModel;
 
-        public bool SlideshowIsntEnabled => !_slideshowIsEnabled;
         public bool SlideshowIsEnabled { get => _slideshowIsEnabled; set => Set(ref _slideshowIsEnabled, value); }
         private bool _slideshowIsEnabled;
 
+        public bool RandomIsEnabled { get => _randomIsEnabled; set => Set(ref _randomIsEnabled, value); }
+        private bool _randomIsEnabled;
+
         public ICommand SelectFolderCommand { get; }
-        public ICommand SetSlideshowEnabledCommand { get; }
+        public ICommand ChangeSlideshowEnabledCommand { get; }
+        public ICommand ChangeRandomEnabledCommand { get; }
 
         public MainWindowViewModel(WallpaperSlideshow wallpaperSlideshow)
         {
@@ -35,10 +39,11 @@ namespace WallpapersSlideshower.ViewModels
             WallpapersViewModels = new ObservableCollection<WallpaperViewModel>();
             WallpapersViewModels.CollectionChanged += OnWallpapersViewModelsChanged;
 
-            _pathToFolder = wallpaperSlideshow.PathToWallpapersFolder;
+            PathToFolder = wallpaperSlideshow.PathToWallpapersFolder;
 
             SelectFolderCommand = new SelectFolderCommand(this, _wallpaperSlideshow);
-            SetSlideshowEnabledCommand = new SetSlideshowEnabledCommand(this, _wallpaperSlideshow);
+            ChangeSlideshowEnabledCommand = new ChangeSlideshowEnabledCommand(this, _wallpaperSlideshow);
+            ChangeRandomEnabledCommand = new ChangeWallpapersRandomEnabledCommand(this, _wallpaperSlideshow);
 
             UpdateWallpapersViewModels();
         }
@@ -47,7 +52,7 @@ namespace WallpapersSlideshower.ViewModels
         {
             WallpapersViewModels.CollectionChanged -= OnWallpapersViewModelsChanged;
             WallpapersViewModels.Clear();
-            foreach (var wallpaper in _wallpaperSlideshow.Wallpapers)
+            foreach (var wallpaper in _wallpaperSlideshow.ExistingWallpapers)
             {
                 var wallpaperViewModel = new WallpaperViewModel(wallpaper.PathToImage, WIDTH_OF_ICON_RESOLUTION);
                 WallpapersViewModels.Add(wallpaperViewModel);
@@ -76,9 +81,9 @@ namespace WallpapersSlideshower.ViewModels
 
         private void OnWallpapersViewModelsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            _wallpaperSlideshow.Wallpapers.Clear();
+            _wallpaperSlideshow.ExistingWallpapers.Clear();
             foreach (var wallpaperViewModel in WallpapersViewModels)
-                _wallpaperSlideshow.Wallpapers.Add(new Wallpaper(wallpaperViewModel.PathToImage));
+                _wallpaperSlideshow.ExistingWallpapers.Add(new Wallpaper(wallpaperViewModel.PathToImage));
         }
     }
 }
