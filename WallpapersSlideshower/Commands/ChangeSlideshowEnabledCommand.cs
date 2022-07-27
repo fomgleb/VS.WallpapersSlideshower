@@ -4,12 +4,12 @@ using WallpapersSlideshower.ViewModels;
 
 namespace WallpapersSlideshower.Commands
 {
-    public class SetSlideshowEnabledCommand : CommandBase
+    public class ChangeSlideshowEnabledCommand : CommandBase
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly WallpaperSlideshow _wallpaperSlideshow;
 
-        public SetSlideshowEnabledCommand(MainWindowViewModel mainWindowViewModel, WallpaperSlideshow wallpaperSlideshow)
+        public ChangeSlideshowEnabledCommand(MainWindowViewModel mainWindowViewModel, WallpaperSlideshow wallpaperSlideshow)
         {
             _mainWindowViewModel = mainWindowViewModel;
             _wallpaperSlideshow = wallpaperSlideshow;
@@ -25,8 +25,7 @@ namespace WallpapersSlideshower.Commands
             if ((bool)parameter == true)
             {
                 SystemEvents.PowerModeChanged += OnPowerModeChanged;
-                _wallpaperSlideshow.SwitchToFirstWallpaper();
-                _wallpaperSlideshow.ShowCurrentWallpaper();
+                _wallpaperSlideshow.ShowNextWallpaper();
             }
             else
                 SystemEvents.PowerModeChanged -= OnPowerModeChanged;
@@ -36,8 +35,7 @@ namespace WallpapersSlideshower.Commands
         private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
         {
             if (e.Mode != PowerModes.Resume) return;
-            _wallpaperSlideshow.SwitchToNextWalppaper();
-            _wallpaperSlideshow.ShowCurrentWallpaper();
+            _wallpaperSlideshow.ShowNextWallpaper();
         }
     }
 }
