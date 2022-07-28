@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WallpapersSlideshower"
         xmlns:c="clr-namespace:WallpapersSlideshower.Converters"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:vm="clr-namespace:WallpapersSlideshower.ViewModels" d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="Wallpapers Slideshower" Height="450" Width="1048">
+        Title="Wallpapers Slideshower" Height="450" Width="1048"
+        Icon="/Resources/Icons/wallpaper-svgrepo-com.png"
+        WindowState="{Binding WindowState}"
+        Visibility="{Binding }">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,7 +21,7 @@
             <c:NegatingConverter x:Key="negatingConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
