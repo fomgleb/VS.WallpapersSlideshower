@@ -4,111 +4,121 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WallpapersSlideshower"
-        xmlns:c="clr-namespace:WallpapersSlideshower.Converters"
-        xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:c="clr-namespace:WallpapersSlideshower.Converters"
         xmlns:vm="clr-namespace:WallpapersSlideshower.ViewModels" d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Wallpapers Slideshower" Height="450" Width="1048"
-        Icon="/Resources/Icons/wallpaper-svgrepo-com.png"
-        WindowState="{Binding WindowState}"
-        Visibility="{Binding }">
+        Icon="/Resources/Icons/wallpaper-svgrepo-com.ico">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Styles/Buttons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <c:NegatingConverter x:Key="negatingConverter"/>
+            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-    
+    <Window.Visibility>
+        <Binding Path="WindowVisibility" Mode="TwoWay" Converter="{StaticResource booleanToVisibilityConverter}"/>
+    </Window.Visibility>
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        <tb:TaskbarIcon IconSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Icon}"
+                        ToolTipText="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Title}"
+                        LeftClickCommand="{Binding ChangeWindowVisibilityCommand}"
+                        LeftClickCommandParameter="{Binding Path=WindowVisibility, Converter={StaticResource negatingConverter}}"
+                        NoLeftClickDelay="True">
+        </tb:TaskbarIcon>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Vertical" Grid.Row="0">
-                <StackPanel Orientation="Horizontal">
-                    <Button Command="{Binding SelectFolderCommand}" 
+                <StackPanel Orientation="Vertical" Grid.Row="0">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Command="{Binding SelectFolderCommand}" 
                             Content="Select Folder"/>
-                    <CheckBox Template="{DynamicResource myCheckBoxTemplate}"
+                        <CheckBox Template="{DynamicResource myCheckBoxTemplate}"
                               Content="Random"
                               IsChecked="{Binding RandomIsEnabled}"
                               Command="{Binding ChangeRandomEnabledCommand}"
                               CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"/>
-                    <ToggleButton Command="{Binding ChangeSlideshowEnabledCommand}"
+                        <ToggleButton Command="{Binding ChangeSlideshowEnabledCommand}"
                                   CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
                                   Width="50"
                                   Height="23"
                                   Margin="3,3,0,3">
-                        <ToggleButton.Template>
-                            <ControlTemplate TargetType="ToggleButton">
-                                <Border x:Name="mainBorder"
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border x:Name="mainBorder"
                                         Background="#FFDDDDDD"
                                         BorderBrush="#FF707070"
                                         BorderThickness="1"
                                         SnapsToDevicePixels="True">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <Border x:Name="squareBorder"
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border x:Name="squareBorder"
                                                 Margin="3"
                                                 Background="Red"
                                                 BorderBrush="Black"
                                                 BorderThickness="2"
                                                 SnapsToDevicePixels="True">
-                                        </Border>
-                                        <TextBlock Text="OFF"
+                                            </Border>
+                                            <TextBlock Text="OFF"
                                                    x:Name="text"
                                                    Grid.Column="1"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"/>
-                                    </Grid>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="true">
-                                        <Setter TargetName="mainBorder" Property="Background" Value="#FFBEE6FD"/>
-                                    </Trigger>
-                                    <Trigger Property="IsChecked" Value="true">
-                                        <Setter TargetName="squareBorder" Property="Grid.Column" Value="1"/>
-                                        <Setter TargetName="text" Property="Grid.Column" Value="0"/>
-                                        <Setter TargetName="squareBorder" Property="Background" Value="Green"/>
-                                        <Setter TargetName="text" Property="Text" Value="ON"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </ToggleButton.Template>
-                    </ToggleButton>
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter TargetName="mainBorder" Property="Background" Value="#FFBEE6FD"/>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="true">
+                                            <Setter TargetName="squareBorder" Property="Grid.Column" Value="1"/>
+                                            <Setter TargetName="text" Property="Grid.Column" Value="0"/>
+                                            <Setter TargetName="squareBorder" Property="Background" Value="Green"/>
+                                            <Setter TargetName="text" Property="Text" Value="ON"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+                    </StackPanel>
+                    <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
                 </StackPanel>
-                <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
-            </StackPanel>
-            <ListView dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
+                <ListView dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                       Grid.Row="1"
                       ScrollViewer.CanContentScroll="False"
                       ItemsSource="{Binding WallpapersViewModels}" Height="auto"
                       SelectedItem="{Binding SelectedWallpaperViewModel}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" ScrollViewer.CanContentScroll="True">
-                            <Image Width="100" Height="75" Source="{Binding IconImageSource}"/>
-                            <TextBlock Text="{Binding FileName}" Margin="5,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListView>
-            <TextBlock Grid.Row="2" Text="{Binding WallpapersViewModels.Count, StringFormat=Number: {0}}"/>
-        </Grid>
-        <Image Grid.Column="2"
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" ScrollViewer.CanContentScroll="True">
+                                <Image Width="100" Height="75" Source="{Binding IconImageSource}"/>
+                                <TextBlock Text="{Binding FileName}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListView>
+                <TextBlock Grid.Row="2" Text="{Binding WallpapersViewModels.Count, StringFormat=Number: {0}}"/>
+            </Grid>
+            <Image Grid.Column="2"
                Source="{Binding SelectedWallpaperViewModel.PathToImage}"/>
+        </Grid>
     </Grid>
 </Window>

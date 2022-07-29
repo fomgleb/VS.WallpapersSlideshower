@@ -5,6 +5,7 @@ using WallpapersSlideshower.Commands;
 using System.Collections.Specialized;
 using System.Threading;
 using System;
+using System.Windows;
 
 namespace WallpapersSlideshower.ViewModels
 {
@@ -29,9 +30,13 @@ namespace WallpapersSlideshower.ViewModels
         public bool RandomIsEnabled { get => _randomIsEnabled; set => Set(ref _randomIsEnabled, value); }
         private bool _randomIsEnabled;
 
+        public bool WindowVisibility { get => _windowVisility; set => Set(ref _windowVisility, value); }
+        private bool _windowVisility = true;
+
         public ICommand SelectFolderCommand { get; }
         public ICommand ChangeSlideshowEnabledCommand { get; }
         public ICommand ChangeRandomEnabledCommand { get; }
+        public ICommand ChangeWindowVisibilityCommand { get; }
 
         public MainWindowViewModel(WallpaperSlideshow wallpaperSlideshow)
         {
@@ -44,6 +49,7 @@ namespace WallpapersSlideshower.ViewModels
             SelectFolderCommand = new SelectFolderCommand(this, _wallpaperSlideshow);
             ChangeSlideshowEnabledCommand = new ChangeSlideshowEnabledCommand(this, _wallpaperSlideshow);
             ChangeRandomEnabledCommand = new ChangeWallpapersRandomEnabledCommand(this, _wallpaperSlideshow);
+            ChangeWindowVisibilityCommand = new ChangeWindowVisibilityCommand(this);
 
             UpdateWallpapersViewModels();
         }
