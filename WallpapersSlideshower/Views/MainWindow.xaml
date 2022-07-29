@@ -7,10 +7,14 @@
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:c="clr-namespace:WallpapersSlideshower.Converters"
-        xmlns:vm="clr-namespace:WallpapersSlideshower.ViewModels" d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
+        xmlns:vm="clr-namespace:WallpapersSlideshower.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Wallpapers Slideshower" Height="450" Width="1048"
-        Icon="/Resources/Icons/wallpaper-svgrepo-com.ico">
+        Icon="/Resources/Icons/wallpaper-svgrepo-com.ico"
+        WindowState="{Binding WindowState, Mode=TwoWay}"
+        Topmost="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,6 +27,11 @@
     <Window.Visibility>
         <Binding Path="WindowVisibility" Mode="TwoWay" Converter="{StaticResource booleanToVisibilityConverter}"/>
     </Window.Visibility>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="StateChanged">
+            <i:InvokeCommandAction Command="{Binding Path=OnWindowStateChangedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Grid>
         <tb:TaskbarIcon IconSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Icon}"

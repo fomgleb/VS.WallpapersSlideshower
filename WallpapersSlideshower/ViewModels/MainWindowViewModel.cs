@@ -33,10 +33,16 @@ namespace WallpapersSlideshower.ViewModels
         public bool WindowVisibility { get => _windowVisility; set => Set(ref _windowVisility, value); }
         private bool _windowVisility = true;
 
+        public WindowState WindowState { get => _windowState; set => Set(ref _windowState, value); }
+        private WindowState _windowState;
+
+        public WindowState WindowStateBeforeHide { get; set; }
+
         public ICommand SelectFolderCommand { get; }
         public ICommand ChangeSlideshowEnabledCommand { get; }
         public ICommand ChangeRandomEnabledCommand { get; }
         public ICommand ChangeWindowVisibilityCommand { get; }
+        public ICommand OnWindowStateChangedCommand { get; }
 
         public MainWindowViewModel(WallpaperSlideshow wallpaperSlideshow)
         {
@@ -50,6 +56,7 @@ namespace WallpapersSlideshower.ViewModels
             ChangeSlideshowEnabledCommand = new ChangeSlideshowEnabledCommand(this, _wallpaperSlideshow);
             ChangeRandomEnabledCommand = new ChangeWallpapersRandomEnabledCommand(this, _wallpaperSlideshow);
             ChangeWindowVisibilityCommand = new ChangeWindowVisibilityCommand(this);
+            OnWindowStateChangedCommand = new OnWindowStateChangedCommand(this);
 
             UpdateWallpapersViewModels();
         }

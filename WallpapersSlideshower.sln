@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFTesting", "WPFTesting\WPFTesting.csproj", "{18D1F700-D9D8-467E-967B-1394B5830BD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WallpapersSlideshowerFramework", "WallpapersSlideshowerFramework\WallpapersSlideshowerFramework.csproj", "{BC20F96C-2E1C-407A-A193-CDF8A4E0F8D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WallpapersSlideshower", "WallpapersSlideshower\WallpapersSlideshower.csproj", "{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{18D1F700-D9D8-467E-967B-1394B5830BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18D1F700-D9D8-467E-967B-1394B5830BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18D1F700-D9D8-467E-967B-1394B5830BD0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC20F96C-2E1C-407A-A193-CDF8A4E0F8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC20F96C-2E1C-407A-A193-CDF8A4E0F8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC20F96C-2E1C-407A-A193-CDF8A4E0F8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC20F96C-2E1C-407A-A193-CDF8A4E0F8D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

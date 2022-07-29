@@ -9,10 +9,10 @@ namespace WallpapersSlideshower.Models
     public class WallpaperSlideshow
     {
         public ObservableCollection<Wallpaper> ExistingWallpapers { get; set; }
-        public string PathToWallpapersFolder { get; private set; }
+        public string? PathToWallpapersFolder { get; private set; }
         public Mode WallpapersSelectionMode { get; set; } = Mode.OneAfterAnother;
 
-        private Wallpaper _currentDesktopWallpaper;
+        private Wallpaper? _currentDesktopWallpaper;
 
         private static readonly string[] IMAGE_EXTENTIONS =
         {
@@ -43,7 +43,6 @@ namespace WallpapersSlideshower.Models
                 ExistingWallpapers.Add(new Wallpaper(pathToImage));
         }
 
-        private readonly Random _random = new Random();
         public void ShowNextWallpaper()
         {
             switch (WallpapersSelectionMode)
@@ -61,7 +60,8 @@ namespace WallpapersSlideshower.Models
                     break;
                 case Mode.Random:
                     var allWallpapersWithoutCurrent = ExistingWallpapers.Where(wallpaper => wallpaper != _currentDesktopWallpaper).ToArray();
-                    _currentDesktopWallpaper = allWallpapersWithoutCurrent[_random.Next(0, allWallpapersWithoutCurrent.Length)];
+                    var random = new Random();
+                    _currentDesktopWallpaper = allWallpapersWithoutCurrent[random.Next(0, allWallpapersWithoutCurrent.Length)];
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(WallpapersSelectionMode), "Enum element not implemented.");

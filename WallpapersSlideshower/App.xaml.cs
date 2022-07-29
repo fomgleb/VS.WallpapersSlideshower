@@ -24,7 +24,7 @@ namespace WallpapersSlideshower
 
             _mainWindowViewModel = new MainWindowViewModel(_wallpaperSlideshow)
             {
-                RandomIsEnabled = Settings.Default.RandomIsEnabled
+                RandomIsEnabled = Settings.Default.RandomIsEnabled,
             };
         }
 
