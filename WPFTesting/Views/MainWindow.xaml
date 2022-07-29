@@ -1,0 +1,83 @@
+﻿<Window x:Class="WPFTesting.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
+        xmlns:vm="clr-namespace:WPFTesting.ViewModels"
+        xmlns:local="clr-namespace:WPFTesting"
+        mc:Ignorable="d"    
+        Title="{Binding Title}"
+        Height="450" Width="800">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Exit"
+                          Command="{Binding CloseApplicationCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Settings">
+                <MenuItem Header="Самовбитись"/>
+            </MenuItem>
+            <MenuItem Header="Бог в помощь">
+                <MenuItem Header="Бога нет"/>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock  Text="Інтелектуальна програма"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="Хай бог помилує"/>
+            </StatusBarItem>
+        </StatusBar>
+        <TabControl>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="Regular_Hospital"
+                                         Height="20" Margin="0,0,5,0"/>
+                        <TextBlock Text="Ukladka 1"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Rectangle Grid.Column="0" Grid.Row="0"
+                               Fill="Black" Stroke="Green"
+                               StrokeThickness="33"
+                               RadiusX="3" RadiusY="33"
+                               Margin="10, 20">
+                        <Rectangle.InputBindings>
+                            <MouseBinding Command="{Binding CloseApplicationCommand}"
+                                          MouseAction="LeftClick"/>
+                        </Rectangle.InputBindings>
+                    </Rectangle>
+                    <Ellipse Grid.Column="1" Grid.Row="0"
+                             Fill="AliceBlue"
+                             Width="120" Height="120"/>
+                    <GridSplitter Grid.Column="0" Grid.RowSpan="2"
+                                  HorizontalAlignment="Right"
+                                  Width="4"/>      
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="Solid_Poo"
+                                         Height="20" Margin="0,0,5,0"/>
+                        <TextBlock Text="Ukladka 2"/>
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

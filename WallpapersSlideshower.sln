@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WallpapersSlideshower.WPF", "WallpapersSlideshower.WPF\WallpapersSlideshower.WPF.csproj", "{39404270-0D89-466D-BBF2-062C94710252}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFTesting", "WPFTesting\WPFTesting.csproj", "{18D1F700-D9D8-467E-967B-1394B5830BD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WallpapersSlideshower.BusinessLogic", "WallpapersSlideshower.BusinessLogic\WallpapersSlideshower.BusinessLogic.csproj", "{94094EE1-740E-472A-A877-16A779739E52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WallpapersSlideshower", "WallpapersSlideshower\WallpapersSlideshower.csproj", "{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{39404270-0D89-466D-BBF2-062C94710252}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{39404270-0D89-466D-BBF2-062C94710252}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{39404270-0D89-466D-BBF2-062C94710252}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{39404270-0D89-466D-BBF2-062C94710252}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94094EE1-740E-472A-A877-16A779739E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94094EE1-740E-472A-A877-16A779739E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94094EE1-740E-472A-A877-16A779739E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94094EE1-740E-472A-A877-16A779739E52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18D1F700-D9D8-467E-967B-1394B5830BD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18D1F700-D9D8-467E-967B-1394B5830BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18D1F700-D9D8-467E-967B-1394B5830BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18D1F700-D9D8-467E-967B-1394B5830BD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBBC59C5-AC92-48E1-8203-D4FE6DB91B6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
