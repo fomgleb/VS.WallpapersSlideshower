@@ -101,6 +101,7 @@
     <Compile Include="Commands\SelectFolderCommand.cs" />
     <Compile Include="Commands\ChangeSlideshowEnabledCommand.cs" />
     <Compile Include="Converters\NegatingConverter.cs" />
+    <Compile Include="Models\DesktopWallpaperChanger.cs" />
     <Compile Include="Models\SaverLoader.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -152,12 +153,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DesktopWallpaperChanger\DesktopWallpaper.csproj">
-      <Project>{88e0ebb3-a7fa-47ca-b61b-546d1e4106cd}</Project>
-      <Name>DesktopWallpaper</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\wallpaper-svgrepo-com.ico" />

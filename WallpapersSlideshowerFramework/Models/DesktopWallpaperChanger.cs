@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace DesktopWallpaper
+namespace WallpapersSlideshower
 {
     public sealed class DesktopWallpaperChanger
     {
