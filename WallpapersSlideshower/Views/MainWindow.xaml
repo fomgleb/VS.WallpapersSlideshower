@@ -56,56 +56,18 @@
                 <StackPanel Orientation="Vertical" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
                         <Button Command="{Binding SelectFolderCommand}" 
-                            Content="Select Folder"/>
+                                Content="Select Folder"/>
                         <CheckBox Template="{DynamicResource myCheckBoxTemplate}"
-                              Content="Random"
-                              IsChecked="{Binding RandomIsEnabled}"
-                              Command="{Binding ChangeRandomEnabledCommand}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"/>
+                                  Content="Random"
+                                  IsChecked="{Binding RandomIsEnabled}"
+                                  Command="{Binding ChangeRandomEnabledCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"/>
                         <ToggleButton Command="{Binding ChangeSlideshowEnabledCommand}"
-                                  CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
-                                  Width="50"
-                                  Height="23"
-                                  Margin="3,3,0,3">
-                            <ToggleButton.Template>
-                                <ControlTemplate TargetType="ToggleButton">
-                                    <Border x:Name="mainBorder"
-                                        Background="#FFDDDDDD"
-                                        BorderBrush="#FF707070"
-                                        BorderThickness="1"
-                                        SnapsToDevicePixels="True">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-                                            <Border x:Name="squareBorder"
-                                                Margin="3"
-                                                Background="Red"
-                                                BorderBrush="Black"
-                                                BorderThickness="2"
-                                                SnapsToDevicePixels="True">
-                                            </Border>
-                                            <TextBlock Text="OFF"
-                                                   x:Name="text"
-                                                   Grid.Column="1"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter TargetName="mainBorder" Property="Background" Value="#FFBEE6FD"/>
-                                        </Trigger>
-                                        <Trigger Property="IsChecked" Value="true">
-                                            <Setter TargetName="squareBorder" Property="Grid.Column" Value="1"/>
-                                            <Setter TargetName="text" Property="Grid.Column" Value="0"/>
-                                            <Setter TargetName="squareBorder" Property="Background" Value="Green"/>
-                                            <Setter TargetName="text" Property="Text" Value="ON"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </ToggleButton.Template>
+                                      CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
+                                      Width="50"
+                                      MinWidth="50"
+                                      Height="23"
+                                      Template="{DynamicResource myToggleButtonTemplate}">
                         </ToggleButton>
                     </StackPanel>
                     <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
