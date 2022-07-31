@@ -11,7 +11,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="Wallpapers Slideshower" Height="450" Width="1048"
+        Title="Wallpapers Slideshower" Height="500" Width="1048"
         Icon="/Resources/Icons/wallpaper-svgrepo-com.ico"
         WindowState="{Binding WindowState, Mode=TwoWay}"
         Topmost="True">
@@ -56,18 +56,32 @@
                 <StackPanel Orientation="Vertical" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
                         <Button Command="{Binding SelectFolderCommand}" 
-                                Content="Select Folder"/>
+                                Content="Select Folder"
+                                ToolTipService.InitialShowDelay="500">
+                            <Button.ToolTip>
+                                <ToolTip Content="Select a folder with wallpapers"/>
+                            </Button.ToolTip>
+                        </Button>
                         <CheckBox Template="{DynamicResource myCheckBoxTemplate}"
                                   Content="Random"
                                   IsChecked="{Binding RandomIsEnabled}"
                                   Command="{Binding ChangeRandomEnabledCommand}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"/>
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"
+                                  ToolTipService.InitialShowDelay="500">
+                            <CheckBox.ToolTip>
+                                <ToolTip Content="If this is true, the sequence will be random"/>
+                            </CheckBox.ToolTip>
+                        </CheckBox>
                         <ToggleButton Command="{Binding ChangeSlideshowEnabledCommand}"
                                       CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
                                       Width="50"
                                       MinWidth="50"
                                       Height="23"
-                                      Template="{DynamicResource myToggleButtonTemplate}">
+                                      Template="{DynamicResource myToggleButtonTemplate}"
+                                      ToolTipService.InitialShowDelay="500">
+                            <ToggleButton.ToolTip>
+                                <ToolTip Content="This toggle button enables wallpapers slide show (After waking up from sleep mode, the wallpaper will change)"/>
+                            </ToggleButton.ToolTip>
                         </ToggleButton>
                     </StackPanel>
                     <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
