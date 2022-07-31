@@ -34,5 +34,29 @@ namespace WallpapersSlideshower.Properties {
                 this["RandomIsEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SlideshowIsEnabled {
+            get {
+                return ((bool)(this["SlideshowIsEnabled"]));
+            }
+            set {
+                this["SlideshowIsEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutorunValue {
+            get {
+                return ((bool)(this["AutorunValue"]));
+            }
+            set {
+                this["AutorunValue"] = value;
+            }
+        }
     }
 }

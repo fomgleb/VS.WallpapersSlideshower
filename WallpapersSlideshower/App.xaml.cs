@@ -16,7 +16,7 @@ namespace WallpapersSlideshower
 
         public App()
         {
-            var loadedWallpaperSlideshow = SaverLoader.Load<WallpaperSlideshow>(WALLPAPER_SLIDESHOW_FILE_NAME);
+            var loadedWallpaperSlideshow = SaverLoader.Load<WallpaperSlideshow>(System.Windows.Forms.Application.StartupPath + WALLPAPER_SLIDESHOW_FILE_NAME);
             if (loadedWallpaperSlideshow != null)
                 _wallpaperSlideshow = loadedWallpaperSlideshow;
             else
@@ -25,7 +25,13 @@ namespace WallpapersSlideshower
             _mainWindowViewModel = new MainWindowViewModel(_wallpaperSlideshow)
             {
                 RandomIsEnabled = Settings.Default.RandomIsEnabled,
+                SlideshowIsEnabled = Settings.Default.SlideshowIsEnabled,
+                AutorunValue = Settings.Default.AutorunValue
             };
+            if (_mainWindowViewModel.SlideshowIsEnabled)
+                _mainWindowViewModel.ChangeSlideshowEnabledCommand.Execute(true);
+            if (_mainWindowViewModel.AutorunValue == true)
+                _mainWindowViewModel.WindowVisibility = false;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -43,6 +49,8 @@ namespace WallpapersSlideshower
         {
             SaverLoader.Save(WALLPAPER_SLIDESHOW_FILE_NAME, _wallpaperSlideshow);
             Settings.Default.RandomIsEnabled = _mainWindowViewModel.RandomIsEnabled;
+            Settings.Default.SlideshowIsEnabled = _mainWindowViewModel.SlideshowIsEnabled;
+            Settings.Default.AutorunValue = _mainWindowViewModel.AutorunValue;
             Settings.Default.Save();
             base.OnExit(e);
         }

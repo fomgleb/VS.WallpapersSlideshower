@@ -18,8 +18,8 @@ namespace WallpapersSlideshower.ViewModels
 
         public ObservableCollection<WallpaperViewModel> WallpapersViewModels { get; set; }
 
-        public string PathToFolder { get => _pathToFolder; set => Set(ref _pathToFolder, value); }
-        private string _pathToFolder;
+        public string? PathToFolder { get => _pathToFolder; set => Set(ref _pathToFolder, value); }
+        private string? _pathToFolder;
 
         public WallpaperViewModel SelectedWallpaperViewModel { get => _selectedWallpaperViewModel; set => Set(ref _selectedWallpaperViewModel, value); }
         private WallpaperViewModel _selectedWallpaperViewModel;
@@ -36,6 +36,9 @@ namespace WallpapersSlideshower.ViewModels
         public WindowState WindowState { get => _windowState; set => Set(ref _windowState, value); }
         private WindowState _windowState;
 
+        public bool AutorunValue { get => _autorunValue; set => Set(ref _autorunValue, value); }
+        private bool _autorunValue;
+
         public WindowState WindowStateBeforeHide { get; set; }
 
         public ICommand SelectFolderCommand { get; }
@@ -43,6 +46,7 @@ namespace WallpapersSlideshower.ViewModels
         public ICommand ChangeRandomEnabledCommand { get; }
         public ICommand ChangeWindowVisibilityCommand { get; }
         public ICommand OnWindowStateChangedCommand { get; }
+        public ICommand ChangeProgramAutorunCommand { get; }
 
         public MainWindowViewModel(WallpaperSlideshow wallpaperSlideshow)
         {
@@ -57,6 +61,7 @@ namespace WallpapersSlideshower.ViewModels
             ChangeRandomEnabledCommand = new ChangeWallpapersRandomEnabledCommand(this, _wallpaperSlideshow);
             ChangeWindowVisibilityCommand = new ChangeWindowVisibilityCommand(this);
             OnWindowStateChangedCommand = new OnWindowStateChangedCommand(this);
+            ChangeProgramAutorunCommand = new ChangeProgramAutorunValueCommand(this);
 
             UpdateWallpapersViewModels();
         }

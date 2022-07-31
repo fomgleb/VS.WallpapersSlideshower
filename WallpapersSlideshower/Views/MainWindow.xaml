@@ -78,9 +78,8 @@
                         </CheckBox>
                         <ToggleButton Command="{Binding ChangeSlideshowEnabledCommand}"
                                       CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
-                                      Width="50"
-                                      MinWidth="50"
-                                      Height="23"
+                                      IsChecked="{Binding SlideshowIsEnabled, Mode=TwoWay}"
+                                      Width="50" MinWidth="50" Height="23"
                                       Template="{DynamicResource myToggleButtonTemplate}"
                                       ToolTipService.InitialShowDelay="500">
                             <ToggleButton.ToolTip>
@@ -88,16 +87,15 @@
                             </ToggleButton.ToolTip>
                         </ToggleButton>
                     </StackPanel>
-                    <!--<StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Run program at startup:"
                                    VerticalAlignment="Center"/>
                         <ToggleButton Template="{DynamicResource myToggleButtonTemplate}"
-                                      Width="50"
-                                      MinWidth="50"
-                                      Height="23">
-                            
-                        </ToggleButton>
-                    </StackPanel>-->
+                                      Width="50" MinWidth="50" Height="23"
+                                      IsChecked="{Binding AutorunValue, Mode=TwoWay}"
+                                      Command="{Binding ChangeProgramAutorunCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"/>
+                    </StackPanel>
                 </StackPanel>
                 <ListView dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                           Grid.Row="1"
