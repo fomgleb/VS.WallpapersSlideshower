@@ -34,23 +34,27 @@
     </i:Interaction.Triggers>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
         <tb:TaskbarIcon IconSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Icon}"
                         ToolTipText="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Title}"
                         LeftClickCommand="{Binding ChangeWindowVisibilityCommand}"
                         LeftClickCommandParameter="{Binding Path=WindowVisibility, Converter={StaticResource negatingConverter}}"
                         NoLeftClickDelay="True">
         </tb:TaskbarIcon>
-        <Grid>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition/>
-                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Vertical" Grid.Row="0">
@@ -64,7 +68,7 @@
                         </Button>
                         <CheckBox Template="{DynamicResource myCheckBoxTemplate}"
                                   Content="Random"
-                                  IsChecked="{Binding RandomIsEnabled}"
+                                  IsChecked="{Binding RandomIsEnabled, Mode=TwoWay}"
                                   Command="{Binding ChangeRandomEnabledCommand}"
                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"
                                   ToolTipService.InitialShowDelay="500">
@@ -84,13 +88,22 @@
                             </ToggleButton.ToolTip>
                         </ToggleButton>
                     </StackPanel>
-                    <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
+                    <!--<StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Run program at startup:"
+                                   VerticalAlignment="Center"/>
+                        <ToggleButton Template="{DynamicResource myToggleButtonTemplate}"
+                                      Width="50"
+                                      MinWidth="50"
+                                      Height="23">
+                            
+                        </ToggleButton>
+                    </StackPanel>-->
                 </StackPanel>
                 <ListView dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
-                      Grid.Row="1"
-                      ScrollViewer.CanContentScroll="False"
-                      ItemsSource="{Binding WallpapersViewModels}" Height="auto"
-                      SelectedItem="{Binding SelectedWallpaperViewModel}">
+                          Grid.Row="1"
+                          ScrollViewer.CanContentScroll="False"
+                          ItemsSource="{Binding WallpapersViewModels}" Height="auto"
+                          SelectedItem="{Binding SelectedWallpaperViewModel}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" ScrollViewer.CanContentScroll="True">
@@ -100,10 +113,19 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListView>
-                <TextBlock Grid.Row="2" Text="{Binding WallpapersViewModels.Count, StringFormat=Number: {0}}"/>
             </Grid>
+            <GridSplitter Width="3" Grid.RowSpan="2" Grid.Column="1" ShowsPreview="False" HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch"/>
             <Image Grid.Column="2"
                Source="{Binding SelectedWallpaperViewModel.PathToImage}"/>
         </Grid>
+        <StatusBar DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom" Grid.Row="1">
+            <StatusBarItem>
+                <TextBlock Grid.Row="2" Text="{Binding WallpapersViewModels.Count, StringFormat=Number: {0}}"/>
+            </StatusBarItem>
+            <StatusBarItem Margin="10,0,0,0">
+                <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
