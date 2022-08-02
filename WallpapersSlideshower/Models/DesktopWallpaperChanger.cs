@@ -8,6 +8,8 @@ namespace WallpapersSlideshower
 {
     public sealed class DesktopWallpaperChanger
     {
+        public static event Action? WallpaperChangedEvent;
+
         DesktopWallpaperChanger() { }
 
         const int SPI_SETDESKWALLPAPER = 20;
@@ -27,15 +29,9 @@ namespace WallpapersSlideshower
             Center
         }
 
-        private static Task _currentSetWallpaperTask;
-        public static async void SetWallpaperAsync(Uri uri, Style style)
+        public static async Task SetWallpaperAsync(Uri uri, Style style)
         {
-            if (_currentSetWallpaperTask != null)
-            {
-                await _currentSetWallpaperTask;
-            }
-
-            _currentSetWallpaperTask = Task.Run(() =>
+            var setWallpaperTask = Task.Run(() =>
             {
                 Stream s = new System.Net.WebClient().OpenRead(uri.ToString());
 
@@ -81,7 +77,8 @@ namespace WallpapersSlideshower
                     SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
             });
 
-            await _currentSetWallpaperTask;
+            await setWallpaperTask;
+            WallpaperChangedEvent?.Invoke();
         }
     }
 }

@@ -5,14 +5,14 @@ namespace WallpapersSlideshower.Commands
 {
     public abstract class CommandBase : ICommand
     {
-        public event EventHandler CanExecuteChanged
+        public event EventHandler? CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public abstract bool CanExecute(object parameter);
+        public abstract bool CanExecute(object? parameter);
 
-        public abstract void Execute(object parameter);
+        public abstract void Execute(object? parameter);
     }
 }

@@ -26,18 +26,6 @@ namespace WallpapersSlideshower.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool RandomIsEnabled {
-            get {
-                return ((bool)(this["RandomIsEnabled"]));
-            }
-            set {
-                this["RandomIsEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool SlideshowIsEnabled {
             get {
                 return ((bool)(this["SlideshowIsEnabled"]));
@@ -50,12 +38,12 @@ namespace WallpapersSlideshower.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AutorunValue {
+        public bool AutorunIsEnabled {
             get {
-                return ((bool)(this["AutorunValue"]));
+                return ((bool)(this["AutorunIsEnabled"]));
             }
             set {
-                this["AutorunValue"] = value;
+                this["AutorunIsEnabled"] = value;
             }
         }
     }

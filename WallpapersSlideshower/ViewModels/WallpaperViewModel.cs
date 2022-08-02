@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -9,8 +8,8 @@ namespace WallpapersSlideshower.ViewModels
 {
     public class WallpaperViewModel : ViewModelBase
     {
-        public ImageSource IconImageSource{ get => _iconImageSource; set => Set(ref _iconImageSource, value); }
-        private ImageSource _iconImageSource;
+        public ImageSource? IconImageSource{ get => _iconImageSource; set => Set(ref _iconImageSource, value); }
+        private ImageSource? _iconImageSource;
 
         public string FileName { get; }
         public string PathToImage { get; }

@@ -1,5 +1,5 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
+using WallpapersSlideshower.Models;
 using WallpapersSlideshower.ViewModels;
 
 namespace WallpapersSlideshower.Commands
@@ -7,34 +7,24 @@ namespace WallpapersSlideshower.Commands
     public class ChangeProgramAutorunValueCommand : CommandBase
     {
         private const string programName = "WallpapersSlideshower";
-        private MainWindowViewModel _mainWindowViewModel;
+        private readonly MainWindowViewModel _mainWindowViewModel;
 
         public ChangeProgramAutorunValueCommand(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
         }
 
-        public override bool CanExecute(object parameter)
+        public override bool CanExecute(object? parameter)
         {
             return true;
         }
 
-        public override void Execute(object parameter)
+        public override void Execute(object? parameter)
         {
-            var autorun = (bool)parameter;
-            string executablePath = System.Windows.Forms.Application.ExecutablePath;
-            var key = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run\\");
-            try
-            {
-                if (autorun)
-                    key.SetValue(programName, executablePath);
-                else
-                    key.DeleteValue(programName);
-
-                _mainWindowViewModel.AutorunValue = autorun;
-                key.Close();
-            }
-            catch { }
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter), "Argument can't be null.");
+            var enableAutorun = (bool)parameter;
+            AutorunChanger.Set(enableAutorun, programName);
+            _mainWindowViewModel.AutorunIsEnabled = enableAutorun;
         }
     }
 }

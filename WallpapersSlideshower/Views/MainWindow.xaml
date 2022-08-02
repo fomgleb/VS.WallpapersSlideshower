@@ -92,7 +92,7 @@
                                    VerticalAlignment="Center"/>
                         <ToggleButton Template="{DynamicResource myToggleButtonTemplate}"
                                       Width="50" MinWidth="50" Height="23"
-                                      IsChecked="{Binding AutorunValue, Mode=TwoWay}"
+                                      IsChecked="{Binding AutorunIsEnabled, Mode=TwoWay}"
                                       Command="{Binding ChangeProgramAutorunCommand}"
                                       CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"/>
                     </StackPanel>

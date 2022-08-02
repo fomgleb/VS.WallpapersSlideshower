@@ -1,7 +1,9 @@
-﻿using System.Windows;
-using WallpapersSlideshower.Models;
+﻿using WallpapersSlideshower.Models;
 using WallpapersSlideshower.ViewModels;
 using WallpapersSlideshower.Properties;
+using System.Windows;
+using System.Collections.ObjectModel;
+using System.IO;
 
 namespace WallpapersSlideshower
 {
@@ -10,28 +12,46 @@ namespace WallpapersSlideshower
     /// </summary>
     public partial class App : Application
     {
-        private const string WALLPAPER_SLIDESHOW_FILE_NAME = "WallpaperSlideshow.dat";
-        private readonly WallpaperSlideshow _wallpaperSlideshow;
+        private readonly WallpapersSlideshow _wallpapersSlideshow;
         private readonly MainWindowViewModel _mainWindowViewModel;
+
+        private readonly string _existingWallpapersPath;
+        private readonly string _pathToWallpapersFolderPath;
+        private readonly string _wallpapersSelectionModePath;
+        private readonly string _currentDesktopWallpaperPath;
 
         public App()
         {
-            var loadedWallpaperSlideshow = SaverLoader.Load<WallpaperSlideshow>(System.Windows.Forms.Application.StartupPath + WALLPAPER_SLIDESHOW_FILE_NAME);
-            if (loadedWallpaperSlideshow != null)
-                _wallpaperSlideshow = loadedWallpaperSlideshow;
-            else
-                _wallpaperSlideshow = new WallpaperSlideshow();
+            Directory.CreateDirectory(System.Windows.Forms.Application.StartupPath + "Data");
 
-            _mainWindowViewModel = new MainWindowViewModel(_wallpaperSlideshow)
-            {
-                RandomIsEnabled = Settings.Default.RandomIsEnabled,
-                SlideshowIsEnabled = Settings.Default.SlideshowIsEnabled,
-                AutorunValue = Settings.Default.AutorunValue
-            };
-            if (_mainWindowViewModel.SlideshowIsEnabled)
-                _mainWindowViewModel.ChangeSlideshowEnabledCommand.Execute(true);
-            if (_mainWindowViewModel.AutorunValue == true)
-                _mainWindowViewModel.WindowVisibility = false;
+            _existingWallpapersPath = GeneratePathToData(nameof(WallpapersSlideshow.ExistingWallpapers));
+            _pathToWallpapersFolderPath = GeneratePathToData(nameof(WallpapersSlideshow.PathToWallpapersFolder));
+            _wallpapersSelectionModePath = GeneratePathToData(nameof(WallpapersSlideshow.WallpapersSelectionMode));
+            _currentDesktopWallpaperPath = GeneratePathToData(nameof(WallpapersSlideshow.CurrentDesktopWallpaper));
+
+            var existingWallpapers = SaverLoader.Load<ObservableCollection<Wallpaper>>(_existingWallpapersPath);
+            var pathToWallpapersFolder = SaverLoader.Load<string>(_pathToWallpapersFolderPath);
+            var wallpapersSelectionMode = SaverLoader.Load<WallpapersSlideshow.Mode>(_wallpapersSelectionModePath);
+            var currentDesktopWallpaper = SaverLoader.Load<Wallpaper>(_currentDesktopWallpaperPath);
+
+            if (existingWallpapers == null)
+                existingWallpapers = new ObservableCollection<Wallpaper>();
+            if (pathToWallpapersFolder == null)
+                pathToWallpapersFolder = "";
+
+            _wallpapersSlideshow = new WallpapersSlideshow(existingWallpapers, pathToWallpapersFolder, wallpapersSelectionMode,
+                currentDesktopWallpaper);
+
+            var randomIsEnabled = wallpapersSelectionMode == WallpapersSlideshow.Mode.Random;
+            var slideshowIsEnabled = Settings.Default.SlideshowIsEnabled;
+            var autorunIsEnabled = Settings.Default.AutorunIsEnabled;
+
+            _mainWindowViewModel = new MainWindowViewModel(_wallpapersSlideshow, randomIsEnabled, slideshowIsEnabled, autorunIsEnabled);
+        }
+
+        private static string GeneratePathToData(string variableName)
+        {
+            return System.Windows.Forms.Application.StartupPath + "Data\\" + variableName + ".dat";
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -47,10 +67,13 @@ namespace WallpapersSlideshower
 
         protected override void OnExit(ExitEventArgs e)
         {
-            SaverLoader.Save(WALLPAPER_SLIDESHOW_FILE_NAME, _wallpaperSlideshow);
-            Settings.Default.RandomIsEnabled = _mainWindowViewModel.RandomIsEnabled;
+            SaverLoader.Save(_existingWallpapersPath, _wallpapersSlideshow.ExistingWallpapers);
+            SaverLoader.Save(_pathToWallpapersFolderPath, _wallpapersSlideshow.PathToWallpapersFolder);
+            SaverLoader.Save(_wallpapersSelectionModePath, _wallpapersSlideshow.WallpapersSelectionMode);
+            if (_wallpapersSlideshow.CurrentDesktopWallpaper != null)
+                SaverLoader.Save(_currentDesktopWallpaperPath, _wallpapersSlideshow.CurrentDesktopWallpaper);
             Settings.Default.SlideshowIsEnabled = _mainWindowViewModel.SlideshowIsEnabled;
-            Settings.Default.AutorunValue = _mainWindowViewModel.AutorunValue;
+            Settings.Default.AutorunIsEnabled = _mainWindowViewModel.AutorunIsEnabled;
             Settings.Default.Save();
             base.OnExit(e);
         }

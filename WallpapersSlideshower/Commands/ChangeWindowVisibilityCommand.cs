@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using WallpapersSlideshower.Models;
 using WallpapersSlideshower.ViewModels;
 
 namespace WallpapersSlideshower.Commands
@@ -15,15 +12,16 @@ namespace WallpapersSlideshower.Commands
             _mainWindowViewModel = mainWindowViewModel;
         }
 
-        public override bool CanExecute(object parameter)
+        public override bool CanExecute(object? parameter)
         {
             return true;
         }
 
-        public override void Execute(object parameter)
+        public override void Execute(object? parameter)
         {
-            var visible = (bool)parameter;
-            _mainWindowViewModel.WindowVisibility = visible;
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter), "Argument can't be null.");
+            var enableVisibility = (bool)parameter;
+            _mainWindowViewModel.WindowVisibility = enableVisibility;
         }
     }
 }
