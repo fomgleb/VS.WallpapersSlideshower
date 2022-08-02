@@ -14,5 +14,17 @@ namespace WallpapersSlideshower.Models
             PathToImage = pathToImage;
             FileName = Path.GetFileName(pathToImage);
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType()) return false;
+            if (obj is not Wallpaper other) return false;
+            return other.FileName == FileName && other.PathToImage == PathToImage;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FileName, PathToImage);
+        }
     }
 }

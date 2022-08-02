@@ -12,12 +12,12 @@ namespace WallpapersSlideshower.Commands
             _mainWindowViewModel = mainWindowViewModel;
         }
 
-        public override bool CanExecute(object parameter)
+        public override bool CanExecute(object? parameter)
         {
             return true;
         }
 
-        public override void Execute(object parameter)
+        public override void Execute(object? parameter)
         {
             if (_mainWindowViewModel.WindowState == WindowState.Minimized)
             {

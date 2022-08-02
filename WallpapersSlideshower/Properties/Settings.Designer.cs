@@ -26,12 +26,24 @@ namespace WallpapersSlideshower.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool RandomIsEnabled {
+        public bool SlideshowIsEnabled {
             get {
-                return ((bool)(this["RandomIsEnabled"]));
+                return ((bool)(this["SlideshowIsEnabled"]));
             }
             set {
-                this["RandomIsEnabled"] = value;
+                this["SlideshowIsEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutorunIsEnabled {
+            get {
+                return ((bool)(this["AutorunIsEnabled"]));
+            }
+            set {
+                this["AutorunIsEnabled"] = value;
             }
         }
     }

@@ -11,7 +11,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="Wallpapers Slideshower" Height="450" Width="1048"
+        Title="Wallpapers Slideshower" Height="500" Width="1048"
         Icon="/Resources/Icons/wallpaper-svgrepo-com.ico"
         WindowState="{Binding WindowState, Mode=TwoWay}"
         Topmost="True">
@@ -34,87 +34,74 @@
     </i:Interaction.Triggers>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
         <tb:TaskbarIcon IconSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Icon}"
                         ToolTipText="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Title}"
                         LeftClickCommand="{Binding ChangeWindowVisibilityCommand}"
                         LeftClickCommandParameter="{Binding Path=WindowVisibility, Converter={StaticResource negatingConverter}}"
                         NoLeftClickDelay="True">
         </tb:TaskbarIcon>
-        <Grid>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition/>
-                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Vertical" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
                         <Button Command="{Binding SelectFolderCommand}" 
-                            Content="Select Folder"/>
+                                Content="Select Folder"
+                                ToolTipService.InitialShowDelay="500">
+                            <Button.ToolTip>
+                                <ToolTip Content="Select a folder with wallpapers"/>
+                            </Button.ToolTip>
+                        </Button>
                         <CheckBox Template="{DynamicResource myCheckBoxTemplate}"
-                              Content="Random"
-                              IsChecked="{Binding RandomIsEnabled}"
-                              Command="{Binding ChangeRandomEnabledCommand}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"/>
+                                  Content="Random"
+                                  IsChecked="{Binding RandomIsEnabled, Mode=TwoWay}"
+                                  Command="{Binding ChangeRandomEnabledCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"
+                                  ToolTipService.InitialShowDelay="500">
+                            <CheckBox.ToolTip>
+                                <ToolTip Content="If this is true, the sequence will be random"/>
+                            </CheckBox.ToolTip>
+                        </CheckBox>
                         <ToggleButton Command="{Binding ChangeSlideshowEnabledCommand}"
-                                  CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
-                                  Width="50"
-                                  Height="23"
-                                  Margin="3,3,0,3">
-                            <ToggleButton.Template>
-                                <ControlTemplate TargetType="ToggleButton">
-                                    <Border x:Name="mainBorder"
-                                        Background="#FFDDDDDD"
-                                        BorderBrush="#FF707070"
-                                        BorderThickness="1"
-                                        SnapsToDevicePixels="True">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-                                            <Border x:Name="squareBorder"
-                                                Margin="3"
-                                                Background="Red"
-                                                BorderBrush="Black"
-                                                BorderThickness="2"
-                                                SnapsToDevicePixels="True">
-                                            </Border>
-                                            <TextBlock Text="OFF"
-                                                   x:Name="text"
-                                                   Grid.Column="1"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter TargetName="mainBorder" Property="Background" Value="#FFBEE6FD"/>
-                                        </Trigger>
-                                        <Trigger Property="IsChecked" Value="true">
-                                            <Setter TargetName="squareBorder" Property="Grid.Column" Value="1"/>
-                                            <Setter TargetName="text" Property="Grid.Column" Value="0"/>
-                                            <Setter TargetName="squareBorder" Property="Background" Value="Green"/>
-                                            <Setter TargetName="text" Property="Text" Value="ON"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </ToggleButton.Template>
+                                      CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
+                                      IsChecked="{Binding SlideshowIsEnabled, Mode=TwoWay}"
+                                      Width="50" MinWidth="50" Height="23"
+                                      Template="{DynamicResource myToggleButtonTemplate}"
+                                      ToolTipService.InitialShowDelay="500">
+                            <ToggleButton.ToolTip>
+                                <ToolTip Content="This toggle button enables wallpapers slide show (After waking up from sleep mode, the wallpaper will change)"/>
+                            </ToggleButton.ToolTip>
                         </ToggleButton>
                     </StackPanel>
-                    <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Run program at startup:"
+                                   VerticalAlignment="Center"/>
+                        <ToggleButton Template="{DynamicResource myToggleButtonTemplate}"
+                                      Width="50" MinWidth="50" Height="23"
+                                      IsChecked="{Binding AutorunIsEnabled, Mode=TwoWay}"
+                                      Command="{Binding ChangeProgramAutorunCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"/>
+                    </StackPanel>
                 </StackPanel>
                 <ListView dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
-                      Grid.Row="1"
-                      ScrollViewer.CanContentScroll="False"
-                      ItemsSource="{Binding WallpapersViewModels}" Height="auto"
-                      SelectedItem="{Binding SelectedWallpaperViewModel}">
+                          Grid.Row="1"
+                          ScrollViewer.CanContentScroll="False"
+                          ItemsSource="{Binding WallpapersViewModels}" Height="auto"
+                          SelectedItem="{Binding SelectedWallpaperViewModel}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" ScrollViewer.CanContentScroll="True">
@@ -124,10 +111,19 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListView>
-                <TextBlock Grid.Row="2" Text="{Binding WallpapersViewModels.Count, StringFormat=Number: {0}}"/>
             </Grid>
+            <GridSplitter Width="3" Grid.RowSpan="2" Grid.Column="1" ShowsPreview="False" HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch"/>
             <Image Grid.Column="2"
                Source="{Binding SelectedWallpaperViewModel.PathToImage}"/>
         </Grid>
+        <StatusBar DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom" Grid.Row="1">
+            <StatusBarItem>
+                <TextBlock Grid.Row="2" Text="{Binding WallpapersViewModels.Count, StringFormat=Number: {0}}"/>
+            </StatusBarItem>
+            <StatusBarItem Margin="10,0,0,0">
+                <TextBlock Text="{Binding PathToFolder, StringFormat=Path to folder: {0}}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

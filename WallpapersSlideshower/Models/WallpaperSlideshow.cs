@@ -2,17 +2,20 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace WallpapersSlideshower.Models
 {
     [Serializable]
-    public class WallpaperSlideshow
+    public class WallpapersSlideshow
     {
-        public ObservableCollection<Wallpaper> ExistingWallpapers { get; set; }
-        public string? PathToWallpapersFolder { get; private set; }
-        public Mode WallpapersSelectionMode { get; set; } = Mode.OneAfterAnother;
+        public event Action? DesktopWallpaperChangedEvent;
 
-        private Wallpaper? _currentDesktopWallpaper;
+        public ObservableCollection<Wallpaper> ExistingWallpapers { get; set; }
+        public string PathToWallpapersFolder { get; private set; }
+        public Mode WallpapersSelectionMode { get; set; }
+
+        public Wallpaper? CurrentDesktopWallpaper { get; private set; }
 
         private static readonly string[] IMAGE_EXTENTIONS =
         {
@@ -20,9 +23,14 @@ namespace WallpapersSlideshower.Models
             ".jpg"
         };
 
-        public WallpaperSlideshow()
+        public WallpapersSlideshow(ObservableCollection<Wallpaper> existingWallpapers, string pathToWallpapersFolder,
+            Mode wallpapersSelectionMode, Wallpaper currentDesktopWallpaper)
         {
-            ExistingWallpapers = new ObservableCollection<Wallpaper>();
+            ExistingWallpapers = existingWallpapers;
+            PathToWallpapersFolder = pathToWallpapersFolder;
+            WallpapersSelectionMode = wallpapersSelectionMode;
+            CurrentDesktopWallpaper = currentDesktopWallpaper;
+            DesktopWallpaperChanger.WallpaperChangedEvent += OnWallpaerChanged;
         }
 
         public void GetWallpapersFromFolder(string pathToFolder, SearchOption searchOption)
@@ -43,31 +51,46 @@ namespace WallpapersSlideshower.Models
                 ExistingWallpapers.Add(new Wallpaper(pathToImage));
         }
 
-        public void ShowNextWallpaper()
+        public Task? CurrentSetWallpaperTask { get; private set; }
+        public async void ShowNextWallpaper()
         {
             switch (WallpapersSelectionMode)
             {
                 case Mode.OneAfterAnother:
-                    if (_currentDesktopWallpaper == null)
+                    if (CurrentDesktopWallpaper == null)
                     {
-                        _currentDesktopWallpaper = ExistingWallpapers[0];
-                        return;
+                        CurrentDesktopWallpaper = ExistingWallpapers[0];
+                        break;
                     }
-                    var indexOfCurrentDesktopWallpaper = ExistingWallpapers.IndexOf(_currentDesktopWallpaper);
-                    _currentDesktopWallpaper = indexOfCurrentDesktopWallpaper + 1 >= ExistingWallpapers.Count ?
-                        _currentDesktopWallpaper = ExistingWallpapers[0] :
-                        _currentDesktopWallpaper = ExistingWallpapers[indexOfCurrentDesktopWallpaper + 1];
+                    var indexOfCurrentDesktopWallpaper = ExistingWallpapers.IndexOf(CurrentDesktopWallpaper);
+                    if (indexOfCurrentDesktopWallpaper == -1)
+                    {
+                        CurrentDesktopWallpaper = ExistingWallpapers[0];
+                        break;
+                    }
+                    CurrentDesktopWallpaper = indexOfCurrentDesktopWallpaper + 1 >= ExistingWallpapers.Count ?
+                        CurrentDesktopWallpaper = ExistingWallpapers[0] :
+                        CurrentDesktopWallpaper = ExistingWallpapers[indexOfCurrentDesktopWallpaper + 1];
                     break;
                 case Mode.Random:
-                    var allWallpapersWithoutCurrent = ExistingWallpapers.Where(wallpaper => wallpaper != _currentDesktopWallpaper).ToArray();
+                        var allWallpapersWithoutCurrent = ExistingWallpapers.Where(wallpaper => !wallpaper.Equals(CurrentDesktopWallpaper)).ToArray();
                     var random = new Random();
-                    _currentDesktopWallpaper = allWallpapersWithoutCurrent[random.Next(0, allWallpapersWithoutCurrent.Length)];
+                    CurrentDesktopWallpaper = allWallpapersWithoutCurrent[random.Next(0, allWallpapersWithoutCurrent.Length)];
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(WallpapersSelectionMode), "Enum element not implemented.");
             }
 
-            DesktopWallpaperChanger.SetWallpaperAsync(new Uri(_currentDesktopWallpaper.PathToImage), DesktopWallpaperChanger.Style.Span);
+            if (CurrentSetWallpaperTask != null && !CurrentSetWallpaperTask.IsCompleted)
+                await CurrentSetWallpaperTask;
+            CurrentSetWallpaperTask = DesktopWallpaperChanger.SetWallpaperAsync(new Uri(CurrentDesktopWallpaper.PathToImage), DesktopWallpaperChanger.Style.Span);
+        }
+
+        private async void OnWallpaerChanged()
+        {
+            if (CurrentSetWallpaperTask != null)
+                await CurrentSetWallpaperTask;
+            DesktopWallpaperChangedEvent?.Invoke();
         }
 
         public enum Mode

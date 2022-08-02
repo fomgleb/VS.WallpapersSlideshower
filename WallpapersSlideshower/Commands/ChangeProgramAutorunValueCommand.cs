@@ -1,13 +1,15 @@
 ﻿using System;
+using WallpapersSlideshower.Models;
 using WallpapersSlideshower.ViewModels;
 
 namespace WallpapersSlideshower.Commands
 {
-    public class ChangeWindowVisibilityCommand : CommandBase
+    public class ChangeProgramAutorunValueCommand : CommandBase
     {
+        private const string programName = "WallpapersSlideshower";
         private readonly MainWindowViewModel _mainWindowViewModel;
 
-        public ChangeWindowVisibilityCommand(MainWindowViewModel mainWindowViewModel)
+        public ChangeProgramAutorunValueCommand(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
         }
@@ -20,8 +22,9 @@ namespace WallpapersSlideshower.Commands
         public override void Execute(object? parameter)
         {
             if (parameter == null) throw new ArgumentNullException(nameof(parameter), "Argument can't be null.");
-            var enableVisibility = (bool)parameter;
-            _mainWindowViewModel.WindowVisibility = enableVisibility;
+            var enableAutorun = (bool)parameter;
+            AutorunChanger.Set(enableAutorun, programName);
+            _mainWindowViewModel.AutorunIsEnabled = enableAutorun;
         }
     }
 }

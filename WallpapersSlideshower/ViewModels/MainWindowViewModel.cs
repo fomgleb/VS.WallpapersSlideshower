@@ -14,15 +14,15 @@ namespace WallpapersSlideshower.ViewModels
     {
         private const int WIDTH_OF_ICON_RESOLUTION = 150;
 
-        private readonly WallpaperSlideshow _wallpaperSlideshow;
+        private readonly WallpapersSlideshow _wallpaperSlideshow;
 
         public ObservableCollection<WallpaperViewModel> WallpapersViewModels { get; set; }
 
-        public string PathToFolder { get => _pathToFolder; set => Set(ref _pathToFolder, value); }
-        private string _pathToFolder;
+        public string? PathToFolder { get => _pathToFolder; set => Set(ref _pathToFolder, value); }
+        private string? _pathToFolder;
 
-        public WallpaperViewModel SelectedWallpaperViewModel { get => _selectedWallpaperViewModel; set => Set(ref _selectedWallpaperViewModel, value); }
-        private WallpaperViewModel _selectedWallpaperViewModel;
+        public WallpaperViewModel? SelectedWallpaperViewModel { get => _selectedWallpaperViewModel; set => Set(ref _selectedWallpaperViewModel, value); }
+        private WallpaperViewModel? _selectedWallpaperViewModel;
 
         public bool SlideshowIsEnabled { get => _slideshowIsEnabled; set => Set(ref _slideshowIsEnabled, value); }
         private bool _slideshowIsEnabled;
@@ -36,6 +36,9 @@ namespace WallpapersSlideshower.ViewModels
         public WindowState WindowState { get => _windowState; set => Set(ref _windowState, value); }
         private WindowState _windowState;
 
+        public bool AutorunIsEnabled { get => _autorunIsEnabled; set => Set(ref _autorunIsEnabled, value); }
+        private bool _autorunIsEnabled;
+
         public WindowState WindowStateBeforeHide { get; set; }
 
         public ICommand SelectFolderCommand { get; }
@@ -43,10 +46,16 @@ namespace WallpapersSlideshower.ViewModels
         public ICommand ChangeRandomEnabledCommand { get; }
         public ICommand ChangeWindowVisibilityCommand { get; }
         public ICommand OnWindowStateChangedCommand { get; }
+        public ICommand ChangeProgramAutorunCommand { get; }
 
-        public MainWindowViewModel(WallpaperSlideshow wallpaperSlideshow)
+        public MainWindowViewModel(WallpapersSlideshow wallpaperSlideshow, bool randomIsEnabled, bool slideshowIsEnabled,
+            bool autorunIsEnabled)
         {
             _wallpaperSlideshow = wallpaperSlideshow;
+            _randomIsEnabled = randomIsEnabled;
+            _slideshowIsEnabled = slideshowIsEnabled;
+            _autorunIsEnabled = autorunIsEnabled;
+
             WallpapersViewModels = new ObservableCollection<WallpaperViewModel>();
             WallpapersViewModels.CollectionChanged += OnWallpapersViewModelsChanged;
 
@@ -57,8 +66,22 @@ namespace WallpapersSlideshower.ViewModels
             ChangeRandomEnabledCommand = new ChangeWallpapersRandomEnabledCommand(this, _wallpaperSlideshow);
             ChangeWindowVisibilityCommand = new ChangeWindowVisibilityCommand(this);
             OnWindowStateChangedCommand = new OnWindowStateChangedCommand(this);
+            ChangeProgramAutorunCommand = new ChangeProgramAutorunValueCommand(this);
+
+            if (slideshowIsEnabled)
+                ChangeSlideshowEnabledCommand.Execute(true);
+            if (autorunIsEnabled)
+                WindowVisibility = false;
+            ChangeRandomEnabledCommand.Execute(randomIsEnabled);
+
+            _wallpaperSlideshow.DesktopWallpaperChangedEvent += OnDesktopWallpaperChanged;
 
             UpdateWallpapersViewModels();
+        }
+
+        private void OnDesktopWallpaperChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
         }
 
         public void UpdateWallpapersViewModels()
@@ -79,7 +102,7 @@ namespace WallpapersSlideshower.ViewModels
             LoadAllIconImagesAsync(_currentLoadAllIconImagesCancellationTockenSource);
         }
 
-        private CancellationTokenSource _currentLoadAllIconImagesCancellationTockenSource;
+        private CancellationTokenSource? _currentLoadAllIconImagesCancellationTockenSource;
         private async void LoadAllIconImagesAsync(CancellationTokenSource cancellationTokenSource)
         {
             var wallpapersViewModelsCopy = new WallpaperViewModel[WallpapersViewModels.Count];
@@ -92,7 +115,7 @@ namespace WallpapersSlideshower.ViewModels
             }
         }
 
-        private void OnWallpapersViewModelsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnWallpapersViewModelsChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             _wallpaperSlideshow.ExistingWallpapers.Clear();
             foreach (var wallpaperViewModel in WallpapersViewModels)
