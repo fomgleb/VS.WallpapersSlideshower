@@ -22,6 +22,11 @@ namespace WallpapersSlideshower.Commands
             if (parameter == null) throw new ArgumentNullException(nameof(parameter), "Argument can't be null.");
             var enableVisibility = (bool)parameter;
             _mainWindowViewModel.WindowVisibility = enableVisibility;
+            if (enableVisibility)
+            {
+                _mainWindowViewModel.Topmost = true;
+                _mainWindowViewModel.Topmost = false;
+            }
         }
     }
 }

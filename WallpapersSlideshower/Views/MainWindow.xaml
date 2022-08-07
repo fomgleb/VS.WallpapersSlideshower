@@ -14,7 +14,7 @@
         Title="Wallpapers Slideshower" Height="500" Width="1048"
         Icon="/Resources/Icons/wallpaper-svgrepo-com.ico"
         WindowState="{Binding WindowState, Mode=TwoWay}"
-        Topmost="True">
+        Topmost="{Binding Topmost}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

@@ -39,6 +39,9 @@ namespace WallpapersSlideshower.ViewModels
         public bool AutorunIsEnabled { get => _autorunIsEnabled; set => Set(ref _autorunIsEnabled, value); }
         private bool _autorunIsEnabled;
 
+        public bool Topmost { get => _topmost; set => Set(ref _topmost, value); }
+        private bool _topmost;
+
         public WindowState WindowStateBeforeHide { get; set; }
 
         public ICommand SelectFolderCommand { get; }
